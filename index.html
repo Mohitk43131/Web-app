@@ -522,7 +522,7 @@ tr:last-child td{border-bottom:none}
       const clientTag = p.isClientAccount ? `<span class="badge" style="background:rgba(5,150,105,0.1);color:var(--emerald)">Client</span>` : '';
 
       const totalReceivedFromClient = p.receivedPayments.reduce((s, t) => s + Number(t.amount), 0);
-      const paybackDue = p.receivedPayments.reduce((s, t) => s + Number(t.amount) + 200, 0);
+      const paybackDue = p.receivedPayments.reduce((s, t) => s + Number(t.amount) + 150, 0);
       const totalSentBack = p.sentPayments.reduce((s, t) => s + Number(t.amount), 0);
       const pendingAmount = Math.max(0, paybackDue - totalSentBack);
 
@@ -537,7 +537,7 @@ tr:last-child td{border-bottom:none}
       } else if (pendingAmount > 0) {
         netClass = 'net-negative';
         netText = 'You Owe (Pending Payback)';
-        netDetail = `${p.receivedPayments.length} payment(s) × (amt + ₹200) = ${fmtNum(paybackDue)} due`;
+        netDetail = `${p.receivedPayments.length} payment(s) × (amt + ₹150) = ${fmtNum(paybackDue)} due`;
       } else if (paybackDue > 0) {
         netClass = 'net-positive';
         netText = '✅ Fully Settled';
@@ -581,7 +581,7 @@ tr:last-child td{border-bottom:none}
 
     document.getElementById('ledgerSummary').innerHTML = `
       <div class="summary-card"><div class="bg-blob" style="background:var(--emerald)"></div><div class="summary-label">Total Received</div><div class="summary-value" style="color:var(--emerald)">${fmtNum(grandReceived)}</div></div>
-      <div class="summary-card"><div class="bg-blob" style="background:var(--amber)"></div><div class="summary-label">Payback Due</div><div class="summary-value" style="color:var(--amber)">${fmtNum(grandPaybackDue)}</div><div class="summary-sub">Each payment + ₹200 bonus</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--amber)"></div><div class="summary-label">Payback Due</div><div class="summary-value" style="color:var(--amber)">${fmtNum(grandPaybackDue)}</div><div class="summary-sub">Each payment + ₹150 bonus</div></div>
       <div class="summary-card"><div class="bg-blob" style="background:var(--accent)"></div><div class="summary-label">Already Sent Back</div><div class="summary-value" style="color:var(--accent)">${fmtNum(grandSentBack)}</div></div>
       <div class="summary-card"><div class="bg-blob" style="background:var(--red)"></div><div class="summary-label">Still Pending</div><div class="summary-value" style="color:var(--red)">${fmtNum(grandPending)}</div></div>`;
   }
@@ -610,7 +610,7 @@ tr:last-child td{border-bottom:none}
       if (txs.received.length === 0) continue;
       const info = clientMap[pk] || { name: pk, email: '', photoURL: '' };
       const totalReceived = txs.received.reduce((s, t) => s + Number(t.amount), 0);
-      const totalPaybackDue = txs.received.reduce((s, t) => s + Number(t.amount) + 200, 0);
+      const totalPaybackDue = txs.received.reduce((s, t) => s + Number(t.amount) + 150, 0);
       const totalSentBack = txs.sent.reduce((s, t) => s + Number(t.amount), 0);
       const pendingAmount = Math.max(0, totalPaybackDue - totalSentBack);
       paybackRows.push({ personKey: pk, name: info.name, email: info.email, photoURL: info.photoURL, receivedCount: txs.received.length, totalReceived, totalPaybackDue, totalSentBack, pendingAmount });
@@ -624,7 +624,7 @@ tr:last-child td{border-bottom:none}
 
     document.getElementById('paybackSummary').innerHTML = `
       <div class="summary-card"><div class="bg-blob" style="background:var(--emerald)"></div><div class="summary-label">Total Received</div><div class="summary-value" style="color:var(--emerald)">${fmtNum(sumReceived)}</div></div>
-      <div class="summary-card"><div class="bg-blob" style="background:var(--amber)"></div><div class="summary-label">Payback Due</div><div class="summary-value" style="color:var(--amber)">${fmtNum(sumDue)}</div><div class="summary-sub">Each payment + ₹200 bonus</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--amber)"></div><div class="summary-label">Payback Due</div><div class="summary-value" style="color:var(--amber)">${fmtNum(sumDue)}</div><div class="summary-sub">Each payment + ₹150 bonus</div></div>
       <div class="summary-card"><div class="bg-blob" style="background:var(--accent)"></div><div class="summary-label">Sent Back</div><div class="summary-value" style="color:var(--accent)">${fmtNum(sumSent)}</div></div>
       <div class="summary-card"><div class="bg-blob" style="background:var(--red)"></div><div class="summary-label">Still Pending</div><div class="summary-value" style="color:var(--red)">${fmtNum(sumPending)}</div></div>`;
 
