@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard | Codiv Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #f0f2f9;
+  --surface: #ffffff;
+  --surface2: #f6f7fc;
+  --surface3: #eceef6;
+  --glass: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.35);
+  --border: #e2e6f2;
+  --border2: #d1d6e8;
+  --text: #0b0f1e;
+  --text2: #3d4463;
+  --text3: #8990ad;
+  --accent: #4f46e5;
+  --accent2: #7c3aed;
+  --accent3: #3b82f6;
+  --accent-light: #eef2ff;
+  --accent-glow: rgba(79,70,229,0.15);
+  --emerald: #059669;
+  --emerald2: #10b981;
+  --emerald-light: #ecfdf5;
+  --red: #dc2626;
+  --red2: #f43f5e;
+  --red-light: #fef2f2;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --shadow-sm: 0 2px 8px rgba(79,70,229,0.06),0 1px 3px rgba(0,0,0,0.04);
+  --shadow: 0 4px 24px rgba(79,70,229,0.08),0 1px 8px rgba(0,0,0,0.03);
+  --shadow-lg: 0 20px 60px rgba(79,70,229,0.12),0 6px 20px rgba(0,0,0,0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  --bounce: 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:700}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:none}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── AUTH ── */
+.auth-bg{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#e8ecfa 0%,#f0f2f9 35%,#ede9fe 65%,#ecfdf5 100%)}
+.auth-bg::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(79,70,229,0.06) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
+.auth-bg::after{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(16,185,129,0.05) 0%,transparent 70%);bottom:-150px;left:-100px;pointer-events:none}
+.auth-card{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:48px 44px;width:100%;max-width:440px;box-shadow:var(--shadow-lg);animation:scaleIn 0.5s var(--bounce)}
+.auth-logo{width:64px;height:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:26px;margin:0 auto 16px;box-shadow:0 12px 32px rgba(79,70,229,0.3);animation:float 3s ease-in-out infinite}
+
+.form-group{margin-bottom:20px}
+.form-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:8px;letter-spacing:0.2px}
+.form-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:12px;font-size:14px;font-family:inherit;color:var(--text);background:var(--surface);transition:all var(--transition);outline:none;font-weight:500}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-glow);background:#fff}
+.form-input::placeholder{color:var(--text3);font-weight:400}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all var(--transition);text-decoration:none;justify-content:center;font-family:inherit;letter-spacing:0.3px;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);opacity:0;transition:opacity var(--transition)}
+.btn:hover::after{opacity:1}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 6px 20px rgba(79,70,229,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(79,70,229,0.4)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--surface3);border-color:var(--accent);color:var(--accent)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:var(--radius-xs)}
+.error-msg{color:var(--red);font-size:13px;font-weight:600;text-align:center;margin-top:14px;min-height:20px}
+
+/* ── APP ── */
+.app-container{max-width:1100px;margin:0 auto;padding:32px 20px;display:none}
+
+/* Header */
+.header{margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 28px;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:var(--radius-lg);border:1px solid var(--glass-border);box-shadow:var(--shadow);animation:fadeUp 0.5s ease;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--emerald2),var(--accent3));border-radius:3px 3px 0 0}
+.header-left{display:flex;align-items:center;gap:16px}
+.logo{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 24px rgba(79,70,229,0.3);flex-shrink:0}
+.header h1{font-size:26px;letter-spacing:-0.5px}
+.header p{color:var(--text2);font-size:14px;margin-top:4px;font-weight:500}
+
+/* Tabs */
+.tabs{display:flex;gap:10px;margin-bottom:28px;padding:6px;background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-sm);flex-wrap:wrap;animation:fadeUp 0.5s ease 0.1s both}
+
+/* Summary */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;animation:fadeUp 0.5s ease 0.2s both}
+.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:all var(--transition)}
+.summary-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.summary-card .bg-blob{position:absolute;right:-25px;top:-25px;width:90px;height:90px;border-radius:50%;opacity:.06}
+.summary-label{font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.summary-value{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.5px}
+.summary-sub{font-size:11px;color:var(--text3);margin-top:6px;font-weight:600}
+
+/* Card grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;animation:fadeUp 0.5s ease 0.3s both}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);transition:all var(--transition)}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:rgba(79,70,229,0.15)}
+
+.person-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;font-family:'Space Grotesk',sans-serif;overflow:hidden;flex-shrink:0;box-shadow:0 4px 12px rgba(79,70,229,0.2)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.person-name{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.person-contact{font-size:13px;color:var(--text3);margin-top:3px}
+
+.badge{font-size:10px;padding:4px 10px;border-radius:100px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.badge-super{background:rgba(217,119,6,0.12);color:var(--amber)}
+.badge-admin{background:rgba(79,70,229,0.1);color:var(--accent)}
+.badge-user{background:var(--surface2);color:var(--text3)}
+
+.stats-row{display:flex;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border)}
+.stat-col{display:flex;flex-direction:column;gap:5px}
+.stat-label{font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.stat-val-sent{color:var(--red);font-weight:700;font-size:16px;font-family:'Space Grotesk',sans-serif}
+.stat-val-rec{color:var(--emerald);font-weight:700;font-size:16px;font-family:'Space Grotesk',sans-serif}
+
+.net-balance{margin-top:18px;padding:16px;border-radius:14px;text-align:center;border:1px solid transparent}
+.net-positive{background:var(--emerald-light);color:#065f46;border-color:rgba(5,150,105,0.15)}
+.net-negative{background:var(--red-light);color:#991b1b;border-color:rgba(220,38,38,0.15)}
+.net-neutral{background:var(--surface2);color:var(--text3);border-color:var(--border)}
+.net-label{font-size:11px;font-weight:800;margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
+.net-amount{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.5px}
+.net-detail{font-size:11px;margin-top:6px;opacity:0.75;font-weight:600}
+
+.loader{text-align:center;padding:48px;color:var(--text3);font-weight:600;grid-column:1/-1;font-size:15px}
+.loader::before{content:'';display:block;width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-content{background:var(--surface);border-radius:var(--radius-lg);padding:32px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);position:relative;animation:scaleIn 0.3s var(--bounce)}
+.modal-close{position:absolute;top:18px;right:18px;background:var(--surface2);border:1.5px solid var(--border);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;color:var(--text3);transition:all var(--transition);font-size:16px}
+.modal-close:hover{background:var(--red-light);color:var(--red);border-color:var(--red);transform:rotate(90deg)}
+.data-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);font-size:14px;gap:16px;align-items:flex-start}
+.data-row:last-child{border-bottom:none}
+.data-key{font-weight:700;color:var(--text2);text-transform:capitalize;min-width:120px}
+.data-val{color:var(--text);font-weight:500;text-align:right;word-break:break-all}
+
+/* Table Section */
+.table-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);animation:fadeUp 0.5s ease 0.3s both}
+.table-top{padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.table-top h3{font-size:18px;letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
+.search-box{position:relative}
+.search-box input{padding:9px 14px 9px 38px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;width:240px;transition:all var(--transition);background:var(--surface2);font-weight:500}
+.search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);background:var(--surface);width:280px}
+.search-box::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:var(--surface2)}
+th{padding:13px 18px;text-align:left;font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:14px 18px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tbody tr{transition:all var(--transition)}
+tbody tr:hover{background:var(--accent-light)}
+tr:last-child td{border-bottom:none}
+
+/* Toast */
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:380px}
+.toast{padding:14px 20px;border-radius:14px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:12px;pointer-events:auto;animation:slideDown 0.4s var(--bounce);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);box-shadow:var(--shadow-lg)}
+.toast.success{background:linear-gradient(135deg,rgba(5,150,105,0.92),rgba(16,185,129,0.92));color:#fff}
+.toast.error{background:linear-gradient(135deg,rgba(220,38,38,0.92),rgba(244,63,94,0.92));color:#fff}
+
+/* Responsive */
+@media(max-width:640px){
+  .auth-card{padding:32px 24px}
+  .header{padding:16px 18px;gap:12px}
+  .header h1{font-size:20px}
+  .logo{width:44px;height:44px;font-size:20px;border-radius:12px}
+  .grid{grid-template-columns:1fr}
+  .summary-grid{grid-template-columns:1fr 1fr}
+  .summary-value{font-size:22px}
+  .tabs{gap:6px}
+  .tabs .btn{padding:9px 14px;font-size:13px;flex:1;min-width:0}
+  th,td{padding:10px 14px;font-size:13px}
+  .search-box input{width:160px}
+  .search-box input:focus{width:180px}
+  .net-amount{font-size:22px}
+  .table-top{padding:16px 18px}
+  .table-top h3{font-size:16px}
+  .app-container{padding:20px 14px}
+}
+@media(max-width:400px){
+  .summary-grid{grid-template-columns:1fr}
+  .auth-card{padding:28px 20px}
+  .header{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- AUTH -->
+<div id="authScreen" class="auth-bg">
+  <div class="auth-card">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="auth-logo">C</div>
+      <h2 style="font-size:26px;letter-spacing:-0.5px">Admin Access</h2>
+      <p style="font-size:14px;color:var(--text3);margin-top:6px;font-weight:500">Restricted dashboard area</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">📧 Admin Email</label>
+      <input class="form-input" id="loginEmail" type="email" placeholder="admin@domain.com" autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">🔐 Password</label>
+      <input class="form-input" id="loginPassword" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')document.getElementById('loginBtn').click()" autocomplete="current-password"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%" id="loginBtn">Secure Login</button>
+    <div id="loginError" class="error-msg"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" class="app-container">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">C</div>
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>Manage ledgers, paybacks and system users</p>
+      </div>
+    </div>
+    <button class="btn btn-secondary" style="flex-shrink:0" id="logoutBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+
+  <div class="tabs">
+    <button class="btn btn-primary" id="tabLedger" onclick="switchTab('ledger')">📊 Ledger Balances</button>
+    <button class="btn btn-secondary" id="tabPayback" onclick="switchTab('payback')">💸 Payback Schedule</button>
+    <button class="btn btn-secondary" id="tabUsers" onclick="switchTab('users')">👥 System Users</button>
+    <button class="btn btn-secondary" id="tabMoney" onclick="switchTab('money')">💰 Client Money</button>
+  </div>
+
+  <!-- LEDGER TAB -->
+  <div id="ledgerTab">
+    <div class="summary-grid" id="ledgerSummary"></div>
+    <div class="grid" id="balancesGrid">
+      <div class="loader">Syncing secure data from Codiv Finance...</div>
+    </div>
+  </div>
+
+  <!-- PAYBACK TAB -->
+  <div id="paybackTab" style="display:none">
+    <div class="summary-grid" id="paybackSummary"></div>
+    <div class="table-section">
+      <div class="table-top">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Clients to Pay Back
+        </h3>
+        <div class="search-box">
+          <input id="pbSearch" type="text" placeholder="Search client..." oninput="filterPayback()"/>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Payments</th>
+              <th>Total Received</th>
+              <th>Payback Due</th>
+              <th>Sent Back</th>
+              <th>Pending</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="pbTableBody">
+            <tr><td colspan="7" style="text-align:center;padding:48px;color:var(--text3)"><div style="font-size:24px;margin-bottom:8px;animation:pulse 1.5s infinite">⏳</div>Loading payback data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT MONEY TAB -->
+  <div id="moneyTab" style="display:none">
+    <div class="summary-grid" id="moneySummary"></div>
+    <div class="grid" id="moneyGrid">
+      <div class="loader">Loading client wallet data...</div>
+    </div>
+  </div>
+
+  <!-- USERS TAB -->
+  <div class="grid" id="usersGrid" style="display:none">
+    <div class="loader">Loading system users...</div>
+  </div>
+</div>
+
+<!-- USER PROFILE MODAL -->
+<div id="userModal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="person-header" id="modalHeader" style="margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhZb109hwM7lklWkJkc0BoBPnt499TjYg",
+    authDomain: "web-finance-e1af7.firebaseapp.com",
+    projectId: "web-finance-e1af7",
+    databaseURL: "https://web-finance-e1af7-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  const SUPER_ADMIN = "mohitk43131@gmail.com";
+  let isSuperAdmin = false;
+  let isAdmin = false;
+
+  let rawPersonsData = {};
+  let personsData = {};
+  let transactionsData = {};
+  let allUsersData = {};
+
+  let isPersonsLoaded = false;
+  let isTxLoaded = false;
+  let isUsersLoaded = false;
+
+  const authScreen = document.getElementById('authScreen');
+  const appScreen = document.getElementById('appScreen');
+  const loginBtn = document.getElementById('loginBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const loginError = document.getElementById('loginError');
+
+  // Toast
+  function showToast(msg, type='info') {
+    const c = document.getElementById('toastContainer');
+    const icons = {success:'✅', error:'❌', info:'ℹ️'};
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<span style="font-size:18px;flex-shrink:0">${icons[type]||'ℹ️'}</span><span>${msg}</span><span style="margin-left:auto;cursor:pointer;opacity:.7;font-size:16px" onclick="this.parentElement.remove()">✕</span>`;
+    c.appendChild(t);
+    setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(20px)'; t.style.transition='0.3s ease'; setTimeout(()=>t.remove(),300); }, 4000);
+  }
+
+  // Tab switching
+  window.switchTab = function(tabName) {
+    document.getElementById('ledgerTab').style.display = 'none';
+    document.getElementById('paybackTab').style.display = 'none';
+    document.getElementById('usersGrid').style.display = 'none';
+    document.getElementById('moneyTab').style.display = 'none';
+    document.getElementById('tabLedger').className = 'btn btn-secondary';
+    document.getElementById('tabPayback').className = 'btn btn-secondary';
+    document.getElementById('tabUsers').className = 'btn btn-secondary';
+    document.getElementById('tabMoney').className = 'btn btn-secondary';
+
+    if (tabName === 'ledger') {
+      document.getElementById('ledgerTab').style.display = 'block';
+      document.getElementById('tabLedger').className = 'btn btn-primary';
+    } else if (tabName === 'payback') {
+      document.getElementById('paybackTab').style.display = 'block';
+      document.getElementById('tabPayback').className = 'btn btn-primary';
+    } else if (tabName === 'money') {
+      document.getElementById('moneyTab').style.display = 'block';
+      document.getElementById('tabMoney').className = 'btn btn-primary';
+    } else {
+      document.getElementById('usersGrid').style.display = 'grid';
+      document.getElementById('tabUsers').className = 'btn btn-primary';
+    }
+  };
+
+  // Modal
+  window.viewUserProfile = function(uid) {
+    const user = allUsersData[uid];
+    if (!user) return;
+    const modal = document.getElementById('userModal');
+    const header = document.getElementById('modalHeader');
+    const body = document.getElementById('modalBody');
+    const initial = user.name ? user.name.charAt(0).toUpperCase() : '?';
+    const avatarHtml = user.photoURL ? `<img src="${user.photoURL}" alt="Profile">` : initial;
+    header.innerHTML = `
+      <div class="avatar" style="width:56px;height:56px;font-size:22px">${avatarHtml}</div>
+      <div>
+        <div style="font-size:20px;font-weight:700;font-family:'Space Grotesk',sans-serif">${user.name || 'No Name'}</div>
+        <div class="person-contact">${user.email || 'No Email'}</div>
+      </div>`;
+    let detailsHtml = '';
+    for (const [key, value] of Object.entries(user)) {
+      if (key === 'photoURL') continue;
+      const displayValue = typeof value === 'object' ? JSON.stringify(value) : value;
+      detailsHtml += `<div class="data-row"><div class="data-key">${key.replace(/_/g, ' ')}</div><div class="data-val">${displayValue}</div></div>`;
+    }
+    body.innerHTML = detailsHtml;
+    modal.style.display = 'flex';
+  };
+
+  window.closeModal = function() {
+    document.getElementById('userModal').style.display = 'none';
+  };
+
+  // Click outside to close modal
+  document.getElementById('userModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  const fmtNum = (n) => {
+    n = Math.abs(Number(n) || 0);
+    if(n >= 10000000) return '₹' + (n/10000000).toFixed(2)+'Cr';
+    if(n >= 100000) return '₹' + (n/100000).toFixed(2)+'L';
+    if(n >= 1000) return '₹' + (n/1000).toFixed(1)+'K';
+    return '₹' + n.toFixed(2);
+  };
+
+  // Auth state
+  onAuthStateChanged(auth, async (user) => {
+    if(user) {
+      const snap = await get(ref(db, `users/${user.uid}`));
+      const data = snap.val() || {};
+      isAdmin = data.role === 'admin' || data.role === 'superadmin' || user.email === SUPER_ADMIN;
+      isSuperAdmin = data.role === 'superadmin' || user.email === SUPER_ADMIN;
+      if (isAdmin) {
+        authScreen.style.display = 'none';
+        appScreen.style.display = 'block';
+        loadAllData();
+      } else {
+        await signOut(auth);
+        loginError.textContent = 'Access Denied: Admin privileges required.';
+      }
+    } else {
+      authScreen.style.display = 'flex';
+      appScreen.style.display = 'none';
+    }
+  });
+
+  loginBtn.addEventListener('click', async () => {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+    if(!email || !pass) { loginError.textContent = 'Please fill all fields.'; return; }
+    loginBtn.textContent = 'Verifying...';
+    loginBtn.disabled = true;
+    loginError.textContent = '';
+    try { await signInWithEmailAndPassword(auth, email, pass); showToast('Welcome back!', 'success'); }
+    catch(e) { loginError.textContent = e.message.replace('Firebase:', '').trim(); }
+    finally { loginBtn.textContent = 'Secure Login'; loginBtn.disabled = false; }
+  });
+
+  logoutBtn.addEventListener('click', async () => {
+    await signOut(auth);
+    showToast('Signed out', 'success');
+  });
+
+  function loadAllData() {
+    onValue(ref(db, 'persons'), snap => {
+      rawPersonsData = snap.val() || {};
+      isPersonsLoaded = true;
+      tryRender();
+    });
+    onValue(ref(db, 'transactions'), snap => {
+      transactionsData = snap.val() || {};
+      isTxLoaded = true;
+      tryRender();
+    });
+    onValue(ref(db, 'users'), snap => {
+      allUsersData = snap.val() || {};
+      isUsersLoaded = true;
+      renderUsers(allUsersData);
+      tryRender();
+    });
+  }
+
+  function tryRender() {
+    if (!isPersonsLoaded || !isTxLoaded || !isUsersLoaded) return;
+
+    personsData = { ...rawPersonsData };
+    for (const uid in allUsersData) {
+      const u = allUsersData[uid];
+      if (u.role === 'client') {
+        personsData[uid] = {
+          name: u.name,
+          contact: u.email || 'Registered Client',
+          email: u.email,
+          photoURL: u.photoURL,
+          isClientAccount: true
+        };
+      }
+    }
+
+    renderLedgers();
+    computePaybackData();
+    renderMoney();
+  }
+
+  // ── LEDGER ──
+  function renderLedgers() {
+    const grid = document.getElementById('balancesGrid');
+    const personKeys = Object.keys(personsData);
+    if (personKeys.length === 0) {
+      grid.innerHTML = '<div class="loader" style="animation:none">No persons or clients found.</div>';
+      return;
+    }
+
+    const ledger = {};
+    personKeys.forEach(key => {
+      ledger[key] = { ...personsData[key], receivedPayments: [], sentPayments: [] };
+    });
+
+    Object.values(transactionsData).forEach(tx => {
+      const pKey = tx.personKey;
+      if (ledger[pKey]) {
+        if (tx.type === 'received') ledger[pKey].receivedPayments.push(tx);
+        else if (tx.type === 'sent') ledger[pKey].sentPayments.push(tx);
+      }
+    });
+
+    let grandReceived = 0, grandPaybackDue = 0, grandSentBack = 0, grandPending = 0;
+
+    const cards = personKeys.map((key, idx) => {
+      const p = ledger[key];
+      const initial = p.name ? p.name.charAt(0).toUpperCase() : '?';
+      const avatarHtml = p.photoURL ? `<img src="${p.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover">` : initial;
+      const clientTag = p.isClientAccount ? `<span class="badge" style="background:rgba(5,150,105,0.1);color:var(--emerald)">Client</span>` : '';
+
+      const totalReceivedFromClient = p.receivedPayments.reduce((s, t) => s + Number(t.amount), 0);
+      const paybackDue = p.receivedPayments.reduce((s, t) => s + Number(t.amount) + 150, 0);
+      const totalSentBack = p.sentPayments.reduce((s, t) => s + Number(t.amount), 0);
+      const pendingAmount = Math.max(0, paybackDue - totalSentBack);
+
+      grandReceived += totalReceivedFromClient;
+      grandPaybackDue += paybackDue;
+      grandSentBack += totalSentBack;
+      grandPending += pendingAmount;
+
+      let netClass = 'net-neutral', netText = 'No Transactions', netDetail = '';
+      if (p.receivedPayments.length === 0 && p.sentPayments.length === 0) {
+        netClass = 'net-neutral'; netText = 'No Transactions';
+      } else if (pendingAmount > 0) {
+        netClass = 'net-negative';
+        netText = 'You Owe (Pending Payback)';
+        netDetail = `${p.receivedPayments.length} payment(s) × (amt + ₹150) = ${fmtNum(paybackDue)} due`;
+      } else if (paybackDue > 0) {
+        netClass = 'net-positive';
+        netText = '✅ Fully Settled';
+        netDetail = 'All paybacks completed';
+      }
+
+      return `
+        <div class="card" style="animation:fadeUp 0.4s ease ${idx * 0.05}s both">
+          <div class="person-header">
+            <div class="avatar">${avatarHtml}</div>
+            <div style="min-width:0">
+              <div class="person-name">${p.name} ${clientTag}</div>
+              <div class="person-contact">${p.contact}</div>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-col">
+              <span class="stat-label">Received from Client 📥</span>
+              <span class="stat-val-rec">${fmtNum(totalReceivedFromClient)}</span>
+              <span style="font-size:11px;color:var(--text3);font-weight:600">${p.receivedPayments.length} payment(s)</span>
+            </div>
+            <div class="stat-col" style="text-align:right">
+              <span class="stat-label">Sent Back 📤</span>
+              <span class="stat-val-sent">${fmtNum(totalSentBack)}</span>
+              <span style="font-size:11px;color:var(--text3);font-weight:600">${p.sentPayments.length} payment(s)</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:13px;color:var(--text2)">
+            <span style="font-weight:600">Payback Due (with ₹150 bonus)</span>
+            <span style="font-weight:700;color:var(--amber);font-family:'Space Grotesk',sans-serif">${fmtNum(paybackDue)}</span>
+          </div>
+          <div class="net-balance ${netClass}">
+            <div class="net-label">${netText}</div>
+            <div class="net-amount">${fmtNum(pendingAmount)}</div>
+            ${netDetail ? `<div class="net-detail">${netDetail}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    grid.innerHTML = cards;
+
+    document.getElementById('ledgerSummary').innerHTML = `
+      <div class="summary-card"><div class="bg-blob" style="background:var(--emerald)"></div><div class="summary-label">Total Received</div><div class="summary-value" style="color:var(--emerald)">${fmtNum(grandReceived)}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--amber)"></div><div class="summary-label">Payback Due</div><div class="summary-value" style="color:var(--amber)">${fmtNum(grandPaybackDue)}</div><div class="summary-sub">Each payment + ₹150 bonus</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--accent)"></div><div class="summary-label">Already Sent Back</div><div class="summary-value" style="color:var(--accent)">${fmtNum(grandSentBack)}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--red)"></div><div class="summary-label">Still Pending</div><div class="summary-value" style="color:var(--red)">${fmtNum(grandPending)}</div></div>`;
+  }
+
+  // ── PAYBACK SCHEDULE ──
+  let paybackRows = [];
+
+  function computePaybackData() {
+    const clientMap = {};
+    for (const key in personsData) {
+      const p = personsData[key];
+      clientMap[key] = { name: p.name || 'Unknown', email: p.email || p.contact || '', photoURL: p.photoURL || '' };
+    }
+
+    const grouped = {};
+    for (const tx of Object.values(transactionsData)) {
+      const pk = tx.personKey;
+      if (!pk) continue;
+      if (!grouped[pk]) grouped[pk] = { received: [], sent: [] };
+      if (tx.type === 'received') grouped[pk].received.push(tx);
+      else if (tx.type === 'sent') grouped[pk].sent.push(tx);
+    }
+
+    paybackRows = [];
+    for (const [pk, txs] of Object.entries(grouped)) {
+      if (txs.received.length === 0) continue;
+      const info = clientMap[pk] || { name: pk, email: '', photoURL: '' };
+      const totalReceived = txs.received.reduce((s, t) => s + Number(t.amount), 0);
+      const totalPaybackDue = txs.received.reduce((s, t) => s + Number(t.amount) + 150, 0);
+      const totalSentBack = txs.sent.reduce((s, t) => s + Number(t.amount), 0);
+      const pendingAmount = Math.max(0, totalPaybackDue - totalSentBack);
+      paybackRows.push({ personKey: pk, name: info.name, email: info.email, photoURL: info.photoURL, receivedCount: txs.received.length, totalReceived, totalPaybackDue, totalSentBack, pendingAmount });
+    }
+    paybackRows.sort((a, b) => b.pendingAmount - a.pendingAmount);
+
+    const sumReceived = paybackRows.reduce((s, r) => s + r.totalReceived, 0);
+    const sumDue = paybackRows.reduce((s, r) => s + r.totalPaybackDue, 0);
+    const sumSent = paybackRows.reduce((s, r) => s + r.totalSentBack, 0);
+    const sumPending = paybackRows.reduce((s, r) => s + r.pendingAmount, 0);
+
+    document.getElementById('paybackSummary').innerHTML = `
+      <div class="summary-card"><div class="bg-blob" style="background:var(--emerald)"></div><div class="summary-label">Total Received</div><div class="summary-value" style="color:var(--emerald)">${fmtNum(sumReceived)}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--amber)"></div><div class="summary-label">Payback Due</div><div class="summary-value" style="color:var(--amber)">${fmtNum(sumDue)}</div><div class="summary-sub">Each payment + ₹150 bonus</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--accent)"></div><div class="summary-label">Sent Back</div><div class="summary-value" style="color:var(--accent)">${fmtNum(sumSent)}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--red)"></div><div class="summary-label">Still Pending</div><div class="summary-value" style="color:var(--red)">${fmtNum(sumPending)}</div></div>`;
+
+    renderPaybackTable(paybackRows);
+  }
+
+  window.filterPayback = function() {
+    const q = document.getElementById('pbSearch').value.toLowerCase();
+    renderPaybackTable(paybackRows.filter(r => r.name.toLowerCase().includes(q) || r.email.toLowerCase().includes(q)));
+  };
+
+  function renderPaybackTable(rows) {
+    const tbody = document.getElementById('pbTableBody');
+    if (!rows || rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:48px;color:var(--text3)"><div style="font-size:28px;margin-bottom:8px;animation:float 3s ease-in-out infinite">📭</div>No clients have sent money yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map((r, idx) => {
+      const isPaid = r.pendingAmount <= 0;
+      const isPartial = !isPaid && r.totalSentBack > 0;
+      const statusHtml = isPaid
+        ? `<span style="background:var(--emerald-light);color:var(--emerald);padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700">✓ Settled</span>`
+        : isPartial
+        ? `<span style="background:rgba(79,70,229,.1);color:var(--accent);padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700">⚡ Partial</span>`
+        : `<span style="background:var(--amber-light);color:var(--amber);padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700">⏳ Pending</span>`;
+      const initial = r.name.charAt(0).toUpperCase();
+      const avatarHtml = r.photoURL ? `<img src="${r.photoURL}" style="width:100%;height:100%;object-fit:cover" onerror="this.outerHTML='${initial}'">` : initial;
+
+      return `<tr style="animation:fadeUp 0.3s ease ${idx * 0.04}s both">
+        <td><div style="display:flex;align-items:center;gap:10px">
+          <div class="avatar" style="width:36px;height:36px;font-size:14px">${avatarHtml}</div>
+          <div><div style="font-weight:700;font-size:14px">${r.name}</div><div style="font-size:11px;color:var(--text3)">${r.email}</div></div>
+        </div></td>
+        <td style="font-weight:700;color:var(--text2)">${r.receivedCount} payment${r.receivedCount !== 1 ? 's' : ''}</td>
+        <td style="font-weight:700;color:var(--emerald);font-family:'Space Grotesk',sans-serif">${fmtNum(r.totalReceived)}</td>
+        <td><div style="font-weight:700;color:var(--amber);font-family:'Space Grotesk',sans-serif">${fmtNum(r.totalPaybackDue)}</div><div style="font-size:11px;color:var(--text3);margin-top:3px">${r.receivedCount} × (amt + ₹200)</div></td>
+        <td style="font-weight:700;color:var(--accent);font-family:'Space Grotesk',sans-serif">${fmtNum(r.totalSentBack)}</td>
+        <td style="font-weight:700;color:${r.pendingAmount > 0 ? 'var(--red)' : 'var(--emerald)'};font-family:'Space Grotesk',sans-serif">${fmtNum(r.pendingAmount)}</td>
+        <td>${statusHtml}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── CLIENT MONEY ──
+  function renderMoney() {
+    const grid = document.getElementById('moneyGrid');
+    const allKeys = Object.keys(personsData);
+
+    if (allKeys.length === 0) {
+      grid.innerHTML = '<div class="loader" style="animation:none">No clients found.</div>';
+      return;
+    }
+
+    let grandAdminSent = 0, grandClientSent = 0, grandWallet = 0;
+    let clientCount = 0;
+
+    const cards = allKeys.map((key, idx) => {
+      const p = personsData[key];
+      const initial = p.name ? p.name.charAt(0).toUpperCase() : '?';
+      const avatarHtml = p.photoURL ? `<img src="${p.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover">` : initial;
+      const clientTag = p.isClientAccount ? `<span class="badge" style="background:rgba(5,150,105,0.1);color:var(--emerald)">Client</span>` : '';
+
+      const txs = Object.values(transactionsData).filter(tx => tx.personKey === key);
+      // Admin sent money TO client → goes into wallet
+      const adminSentToClient = txs.filter(t => t.type === 'sent').reduce((s, t) => s + Number(t.amount), 0);
+      const adminSentCount = txs.filter(t => t.type === 'sent').length;
+      // Client sent money TO admin → deducted from wallet
+      const clientSentToAdmin = txs.filter(t => t.type === 'received').reduce((s, t) => s + Number(t.amount), 0);
+      const clientSentCount = txs.filter(t => t.type === 'received').length;
+      // Remaining wallet balance
+      const walletBalance = Math.max(0, adminSentToClient - clientSentToAdmin);
+
+      grandAdminSent += adminSentToClient;
+      grandClientSent += clientSentToAdmin;
+      grandWallet += walletBalance;
+      if (adminSentToClient > 0 || clientSentToAdmin > 0) clientCount++;
+
+      let netClass = 'net-neutral', netText = 'No Transactions', netDetail = '';
+      if (adminSentToClient === 0 && clientSentToAdmin === 0) {
+        netClass = 'net-neutral'; netText = 'No Transactions';
+      } else if (walletBalance <= 0) {
+        netClass = 'net-positive';
+        netText = '✅ Wallet Cleared';
+        netDetail = 'Client returned all admin funds';
+      } else {
+        netClass = 'net-negative';
+        netText = '💳 Remaining Wallet';
+        netDetail = `₹${adminSentToClient.toLocaleString()} sent − ₹${clientSentToAdmin.toLocaleString()} returned`;
+      }
+
+      return `
+        <div class="card" style="animation:fadeUp 0.4s ease ${idx * 0.05}s both">
+          <div class="person-header">
+            <div class="avatar">${avatarHtml}</div>
+            <div style="min-width:0">
+              <div class="person-name">${p.name} ${clientTag}</div>
+              <div class="person-contact">${p.contact || p.email || ''}</div>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-col">
+              <span class="stat-label">Admin Sent 📤</span>
+              <span class="stat-val-rec">${fmtNum(adminSentToClient)}</span>
+              <span style="font-size:11px;color:var(--text3);font-weight:600">${adminSentCount} payment(s)</span>
+            </div>
+            <div class="stat-col" style="text-align:right">
+              <span class="stat-label">Client Returned 📥</span>
+              <span class="stat-val-sent">${fmtNum(clientSentToAdmin)}</span>
+              <span style="font-size:11px;color:var(--text3);font-weight:600">${clientSentCount} payment(s)</span>
+            </div>
+          </div>
+          <div class="net-balance ${netClass}">
+            <div class="net-label">${netText}</div>
+            <div class="net-amount">${fmtNum(walletBalance)}</div>
+            ${netDetail ? `<div class="net-detail">${netDetail}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    grid.innerHTML = cards;
+
+    document.getElementById('moneySummary').innerHTML = `
+      <div class="summary-card"><div class="bg-blob" style="background:var(--accent)"></div><div class="summary-label">Active Clients</div><div class="summary-value" style="color:var(--accent)">${clientCount}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--emerald)"></div><div class="summary-label">Admin Sent Out</div><div class="summary-value" style="color:var(--emerald)">${fmtNum(grandAdminSent)}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--accent3)"></div><div class="summary-label">Clients Returned</div><div class="summary-value" style="color:var(--accent3)">${fmtNum(grandClientSent)}</div></div>
+      <div class="summary-card"><div class="bg-blob" style="background:var(--red)"></div><div class="summary-label">Total Remaining</div><div class="summary-value" style="color:var(--red)">${fmtNum(grandWallet)}</div></div>`;
+  }
+
+  // ── USERS ──
+  function renderUsers(usersData) {
+    const grid = document.getElementById('usersGrid');
+    const userKeys = Object.keys(usersData);
+    if (userKeys.length === 0) {
+      grid.innerHTML = '<div class="loader" style="animation:none">No users found.</div>';
+      return;
+    }
+    grid.innerHTML = userKeys.map((uid, idx) => {
+      const u = usersData[uid];
+      const initial = u.name ? u.name.charAt(0).toUpperCase() : '?';
+      const avatarHtml = u.photoURL ? `<img src="${u.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover">` : initial;
+      let badgeHtml = '<span class="badge badge-user">User</span>';
+      if(u.role === 'superadmin') badgeHtml = '<span class="badge badge-super">⭐ Super Admin</span>';
+      else if(u.role === 'admin') badgeHtml = '<span class="badge badge-admin">🛡️ Admin</span>';
+      else if(u.role === 'client') badgeHtml = '<span class="badge" style="background:rgba(5,150,105,0.1);color:var(--emerald)">👤 Client</span>';
+      let actionBtn = '';
+      if (isAdmin) {
+        actionBtn = `<div style="margin-top:18px;border-top:1px solid var(--border);padding-top:16px">
+          <button class="btn btn-outline btn-sm" style="width:100%" onclick="viewUserProfile('${uid}')">View Profile</button></div>`;
+      }
+      return `<div class="card" style="animation:fadeUp 0.4s ease ${idx * 0.04}s both">
+        <div class="person-header" style="margin-bottom:0">
+          <div class="avatar">${avatarHtml}</div>
+          <div style="min-width:0">
+            <div class="person-name">${u.name || 'Unknown'} ${badgeHtml}</div>
+            <div class="person-contact" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email}</div>
+          </div>
+        </div>${actionBtn}</div>`;
+    }).join('');
+  }
+</script>
+</body>
+</html>
